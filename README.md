@@ -2,8 +2,9 @@
 
 ## Setup
 1. Modificare il file setup.ps1 indicando nella variabile $premakeVersion la versione di premake da scaricare
-2. Eseguire da shell dos setup.bat per scaricare automaticamente premake
-3. Esguire premake.bat per generare la soluzione e il progetto visual studio
+2. Modificare nel file vendor/premake/premake5.lua le variabile di ambiente WWGM_HOME e WWGMTK_HOME per puntare rispettivamente all'installazione del uwgm e del relativo toolkit
+3. Eseguire da shell dos setup.bat per scaricare automaticamente premake
+4. Esguire premake.bat per generare la soluzione e il progetto visual studio
 
 ## Build
 Il premake genererà 3 target di build (Debug, Release, Distribution)
