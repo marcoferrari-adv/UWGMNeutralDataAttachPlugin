@@ -1,8 +1,9 @@
 # Plugin UWGM per caricamento allegati
 
 ## Setup
-1. Eseguire da shell dos setup.bat per scaricare automaticamente premake
-2. Esguire premake.bat per generare la soluzione e il progetto visual studio
+1. Modificare il file setup.ps1 indicando nella variabile $premakeVersion la versione di premake da scaricare
+2. Eseguire da shell dos setup.bat per scaricare automaticamente premake
+3. Esguire premake.bat per generare la soluzione e il progetto visual studio
 
 ## Build
 Il premake genererà 3 target di build (Debug, Release, Distribution)
