@@ -1,0 +1,12 @@
+# Plugin UWGM per caricamento allegati
+
+## Setup
+1. Eseguire da shell dos setup.bat per scaricare automaticamente premake
+2. Esguire premake.bat per generare la soluzione e il progetto visual studio
+
+## Build
+Il premake genererà 3 target di build (Debug, Release, Distribution)
+
+La build Debug contiene i simboli di debug nessuna ottimizzazione del codice e la definizione della macro DEBUG che abilita determinate funzioni di debugging nel codice \
+La build Release non contiene simboli di debug ma non rimuove tutte le istruzioni di pre processore per il debug \
+La build Distribution è simile a release ma rimuove tutte le istruzione di preprocessore if DEBUG e if !defined(DISTRIBUTION)
