@@ -11,9 +11,8 @@
 
 void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorkspace_ptr workspace, wwgmtkSavedModelSeq_ptr savedModels)
 {
-#if DEBUG
-    m_Customizer->showMessage("Post save event wwgmtkAPIDemosWSSaveListener::onPostSaveToWorkspace", wwgmtkMessageType_Info);
-#endif
+
+    LOG_DEBUG_INFO_MSG(m_Customizer, "Post save event wwgmtkAPIDemosWSSaveListener::onPostSaveToWorkspace");
    
     wwgmtkWorkspaceViewer_ptr workspaceView = UWGMUtils::getWorkspaceViewer(m_Customizer->getClient(), workspace);
     if (workspaceView.isnull())
@@ -38,17 +37,13 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
         m_Customizer->showMessage("Processing save of model " + savedModelName, wwgmtkMessageType_Info);
         if (savedModelName.Match("*.sdldrw"))
         {
-#if DEBUG
-            m_Customizer->showMessage("File doesn't match pattern *.sdldrw, skipping", wwgmtkMessageType_Warning);
-#endif
+            LOG_DEBUG_WARN_MSG(m_Customizer, "File doesn't match pattern *.sdldrw, skipping");
             continue;
         }
 
         savedModelName.Substitute("slddrw", "zip");
 
-#if DEBUG
-        m_Customizer->showMessage("Expected zip file name is " + savedModelName, wwgmtkMessageType_Info);
-#endif
+        LOG_DEBUG_INFO_MSG(m_Customizer, "Expected zip file name is %ls", savedModelName);
 
         for (const auto neutralDataPath : m_NeutralDataPaths)
         {
@@ -62,9 +57,8 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
             if (dwAttrib == INVALID_FILE_ATTRIBUTES || (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
                 continue;
 
-#if DEBUG
-            m_Customizer->showMessage("Adding content " + sourcePath + " with name " + savedModelName, wwgmtkMessageType_Info);
-#endif
+            LOG_DEBUG_INFO_MSG(m_Customizer, "Adding content %ls with name %ls", sourcePath, savedModelName);
+
             wwgmtkEditEpmDocument_ptr epmEdit = UWGMUtils::getEditEPMDocumentInWorkSpace(workspaceView, editor, originalModelName);
             if (epmEdit.isnull())
             {
@@ -79,9 +73,7 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
                 continue;
             }
 
-#if DEBUG
-            m_Customizer->showMessage("Opening content for write", wwgmtkMessageType_Info);
-#endif
+            LOG_DEBUG_INFO_MSG(m_Customizer, "Opening content for write");
 
             wwgmtkCachedFile_ptr cachedFile = editor->openContentForWrite(editContent);
             if (cachedFile.isnull())
@@ -91,9 +83,8 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
             }
 
             xstring destinationPath = cachedFile->getHandle();
-#if DEBUG
-            m_Customizer->showMessage("Opening writing content to " + destinationPath, wwgmtkMessageType_Info);
-#endif
+
+            LOG_DEBUG_INFO_MSG(m_Customizer, "Opening writing content to %ls", destinationPath);
 
             if (!FileSystemUtils::copyFile(sourcePath, destinationPath))
             {

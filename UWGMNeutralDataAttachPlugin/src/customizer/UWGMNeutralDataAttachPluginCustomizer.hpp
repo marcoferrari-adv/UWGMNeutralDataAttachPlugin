@@ -17,7 +17,7 @@ public:
 
 	xstring executeJSCommand(xrstring params);
 
-	void showMessage(xstring msg, xint msgType, xbool saveLog = xfalse);
+	void showMessage(xstring msg, xint msgType);
 
 	wwgmtkClient_ptr getClient()
 	{

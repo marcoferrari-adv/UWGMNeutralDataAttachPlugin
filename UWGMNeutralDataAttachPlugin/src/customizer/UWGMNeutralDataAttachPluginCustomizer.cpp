@@ -21,16 +21,11 @@ xint UWGMNeutralDataAttachPluginCustomizer::initialize(wwgmtkClient_ptr client)
 	m_Client = client;
 	this->showMessage("UWGMNeutralDataAttachPlugin Application initialize", wwgmtkMessageType_Info);
 
-#if DEBUG
-	std::wstring iniMap = m_ClientIni->dumpIniMap();
-	this->showMessage(xstring::Printf("UWGM client init map is %ls ", iniMap.c_str()), wwgmtkMessageType_Info);
-#endif
+	LOG_DEBUG_INFO_MSG(this, "UWGM client init map is %ls", m_ClientIni->dumpIniMap().c_str());
 
 	std::wstring neutralDataConfiguiredValue = m_ClientIni->readProperty(L"SolidWorks", L"upload.autoattach.searchpath");
 
-#if DEBUG
-	this->showMessage(xstring::Printf("UWGM client upload property is %ls ", neutralDataConfiguiredValue.c_str()), wwgmtkMessageType_Info);
-#endif
+	LOG_DEBUG_INFO_MSG(this, "UWGM client upload property is %ls", neutralDataConfiguiredValue.c_str());
 
 	if (neutralDataConfiguiredValue.empty())
 	{
@@ -51,7 +46,7 @@ xint UWGMNeutralDataAttachPluginCustomizer::initialize(wwgmtkClient_ptr client)
 	this->showMessage("CleanUWGMNeutralDataFolder save listener registered", wwgmtkMessageType_Info);
 
 #if !defined(DISTRIBUTION)
-	this->showMessage(xstring::Printf("CleanUWGMNeutralDataFolder inzialization took %f ms", sw.elapsedMilliseconds()), wwgmtkMessageType_Info);
+	LOG_DEBUG_INFO_MSG(this, "CleanUWGMNeutralDataFolder inzialization took %f ms", sw.elapsedMilliseconds());
 #endif
 	return wwgmtkError_NoError;
 }
@@ -67,13 +62,14 @@ xstring UWGMNeutralDataAttachPluginCustomizer::executeJSCommand(xrstring params)
 	return xstringnil;
 }
 
-void UWGMNeutralDataAttachPluginCustomizer::showMessage(xstring msg, xint msgType, xbool saveLog)
+void UWGMNeutralDataAttachPluginCustomizer::showMessage(xstring msg, xint msgType)
 {
 	if (msg.IsNull() || msg.IsEmpty())
 		return;
 
 	wwgmtkClientWindow_ptr tkWin = m_Client->getTopWindow();
-	tkWin->showMessage(msg, msgType);
+	if(!tkWin.isnull())
+		tkWin->showMessage(msg, msgType);
 }
 
 UWGMNeutralDataAttachPluginCustomizer::~UWGMNeutralDataAttachPluginCustomizer()
