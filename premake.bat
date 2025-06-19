@@ -1,1 +1,1 @@
-premake5.exe --file=vendor\premake\premake5.lua vs2022
+premake5.exe --file=vendor\premake\premake5.lua %1

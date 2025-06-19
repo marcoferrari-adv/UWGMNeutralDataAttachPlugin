@@ -43,7 +43,9 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
 
         savedModelName.Substitute("slddrw", "zip");
 
-        LOG_DEBUG_INFO_MSG(m_Customizer, "Expected zip file name is %ls", savedModelName);
+        m_Customizer->showMessage("Processing save of model " + savedModelName, wwgmtkMessageType_Info);
+
+        LOG_DEBUG_INFO_MSG(m_Customizer,  "Expected zip file name is %s", (const char*) savedModelName);
 
         for (const auto neutralDataPath : m_NeutralDataPaths)
         {
@@ -57,7 +59,7 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
             if (dwAttrib == INVALID_FILE_ATTRIBUTES || (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
                 continue;
 
-            LOG_DEBUG_INFO_MSG(m_Customizer, "Adding content %ls with name %ls", sourcePath, savedModelName);
+            LOG_DEBUG_INFO_MSG(m_Customizer, "Adding content %s with name %s", (const char*) sourcePath, (const char*) savedModelName);
 
             wwgmtkEditEpmDocument_ptr epmEdit = UWGMUtils::getEditEPMDocumentInWorkSpace(workspaceView, editor, originalModelName);
             if (epmEdit.isnull())
@@ -66,7 +68,7 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
                 continue;
             }
 
-            wwgmtkEditContentObject_ptr editContent = epmEdit->addContent(savedModelName, "GENERAL", xfalse, sourcePath);
+            wwgmtkEditContentObject_ptr editContent = epmEdit->addContent(savedModelName, "DRAWING", xfalse, sourcePath);
             if (editContent.isnull())
             {
                 m_Customizer->showMessage("Unable to create cache content", wwgmtkMessageType_Error);
@@ -84,7 +86,7 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
 
             xstring destinationPath = cachedFile->getHandle();
 
-            LOG_DEBUG_INFO_MSG(m_Customizer, "Opening writing content to %ls", destinationPath);
+            LOG_DEBUG_INFO_MSG(m_Customizer, "Opening writing content to %s", (const char*) destinationPath);
 
             if (!FileSystemUtils::copyFile(sourcePath, destinationPath))
             {

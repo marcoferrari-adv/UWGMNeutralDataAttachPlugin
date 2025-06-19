@@ -1,6 +1,5 @@
--- Variabili configurabili (modificabili facilmente dall'utente)
-local WWGM_HOME = "C:/Program Files/PTC/wgm"
-local WWGMTK_HOME = WWGM_HOME .. "/wwgmtk"
+local WWGM_HOME = os.getenv("UWGM_HOME")
+local WWGMTK_HOME = os.getenv("UWGM_TK_HOME")
 
 workspace "UWGMNeutralDataAttachPlugin"
     configurations { "Debug", "Release", "Distribution" }
@@ -16,7 +15,7 @@ project "UWGMNeutralDataAttachPlugin"
     staticruntime "off"
 
     targetdir ("%{prj.location}/bin/%{cfg.buildcfg}")
-    objdir ("%{prj.location}/bin/%{cfg.buildcfg}")
+    objdir ("%{prj.location}/bin-int/%{cfg.buildcfg}")
 	
 	pchheader "pch.hpp"
     pchsource "%{prj.location}/src/pch.cpp"

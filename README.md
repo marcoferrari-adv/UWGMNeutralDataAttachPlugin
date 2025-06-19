@@ -1,10 +1,13 @@
 # Plugin UWGM per caricamento allegati
 
 ## Setup
-1. Modificare il file setup.ps1 indicando nella variabile $premakeVersion la versione di premake da scaricare
-2. Modificare nel file vendor/premake/premake5.lua le variabile di ambiente WWGM_HOME e WWGMTK_HOME per puntare rispettivamente all'installazione del uwgm e del relativo toolkit
-3. Eseguire da shell dos setup.bat per scaricare automaticamente premake
-4. Esguire premake.bat per generare la soluzione e il progetto visual studio
+1. Eseguire da shell dos setup.bat per scaricare automaticamente premake, impostare la uwgm home e il path al toolkit
+2. Riavviare la shell
+3. Esguire premake.bat per generare il progetto/soluzione, il comando si aspetta come parametro il tipo di progetto da utilizzare fare riferimento alla documentazione premake per le azioni disponibili [premake](https://premake.github.io/docs/Using-Premake/#using-premake-to-generate-project-files)
+
+```bash
+	premake.bat vs2022
+```
 
 ## Build
 Il premake genererà 3 target di build (Debug, Release, Distribution)
