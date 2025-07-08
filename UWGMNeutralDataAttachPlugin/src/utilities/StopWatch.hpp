@@ -14,7 +14,7 @@ public:
 
     double elapsedMilliseconds() const;
     double elapsedSeconds() const;
-    std::string elapsedAsString() const;
+    const std::string& elapsedAsString() const;
 
 private:
     using Clock = std::chrono::high_resolution_clock;

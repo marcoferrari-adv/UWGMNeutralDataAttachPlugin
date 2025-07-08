@@ -1,5 +1,6 @@
 local WWGM_HOME = os.getenv("UWGM_HOME")
 local WWGMTK_HOME = os.getenv("UWGM_TK_HOME")
+local VENDOR_DIR = "../../vendor"
 
 workspace "UWGMNeutralDataAttachPlugin"
     configurations { "Debug", "Release", "Distribution" }
@@ -31,7 +32,8 @@ project "UWGMNeutralDataAttachPlugin"
 
     includedirs {
         "%{prj.location}/src",
-        WWGMTK_HOME .. "/src/includes"
+        WWGMTK_HOME .. "/src/includes",
+		VENDOR_DIR .. "/plog/include"
     }
 
     libdirs {
@@ -87,6 +89,8 @@ project "UWGMNeutralDataAttachPlugin"
         "/nologo", "/subsystem:console", "/machine:amd64", "/dll", "/debug",
         "/EXPORT:wwgmtkGetCustomizer"
     }
+	
+	dependson { "spdlog" }
 
     filter "configurations:Debug"
         defines { "DEBUG"}

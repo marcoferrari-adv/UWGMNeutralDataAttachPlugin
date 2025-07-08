@@ -2,12 +2,12 @@
 
 #include "FileSystemUtils.hpp"
 
-bool FileSystemUtils::copyFile(xstring pathFrom, xstring pathTo)
+bool FileSystemUtils::copyFile(const xstring& pathFrom, const xstring& pathTo)
 {
     return copyFile(static_cast<const wchar_t*>(pathFrom), static_cast<const wchar_t*>(pathTo));
 }
 
-bool FileSystemUtils::copyFile(std::wstring pathFrom, std::wstring pathTo)
+bool FileSystemUtils::copyFile(const std::wstring& pathFrom, const std::wstring& pathTo)
 {
     return copyFile(pathFrom.c_str(), pathFrom.c_str());
 }

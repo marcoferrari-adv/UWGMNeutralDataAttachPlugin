@@ -38,7 +38,7 @@ double StopWatch::elapsedSeconds() const
     return std::chrono::duration<double>(end - m_startTime).count();
 }
 
-std::string StopWatch::elapsedAsString() const
+const std::string& StopWatch::elapsedAsString() const
 {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(3) << elapsedSeconds() << "s";

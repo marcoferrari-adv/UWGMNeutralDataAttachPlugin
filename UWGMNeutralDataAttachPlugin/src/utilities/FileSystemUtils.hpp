@@ -5,9 +5,9 @@
 class FileSystemUtils
 {
 public:
-	static bool copyFile(xstring pathFrom, xstring pathTo);
+	static bool copyFile(const xstring& pathFrom, const xstring& pathTo);
 
-	static bool copyFile(std::wstring pathFrom, std::wstring pathTo);
+	static bool copyFile(const std::wstring& pathFrom, const std::wstring& pathTo);
 
 	static bool copyFile(const wchar_t* pathFrom, const wchar_t* pathTo);
 };

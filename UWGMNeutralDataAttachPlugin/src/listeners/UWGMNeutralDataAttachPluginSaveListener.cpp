@@ -12,8 +12,6 @@
 void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorkspace_ptr workspace, wwgmtkSavedModelSeq_ptr savedModels)
 {
 
-    LOG_DEBUG_INFO_MSG(m_Customizer, "Post save event wwgmtkAPIDemosWSSaveListener::onPostSaveToWorkspace");
-   
     wwgmtkWorkspaceViewer_ptr workspaceView = UWGMUtils::getWorkspaceViewer(m_Customizer->getClient(), workspace);
     if (workspaceView.isnull())
     {
@@ -35,17 +33,14 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
         xstring originalModelName = savedModels->get(i)->getName();
         xstring savedModelName = originalModelName.ToLower();
         m_Customizer->showMessage("Processing save of model " + savedModelName, wwgmtkMessageType_Info);
-        if (savedModelName.Match("*.sdldrw"))
+        if (!savedModelName.Match("*.slddrw"))
         {
-            LOG_DEBUG_WARN_MSG(m_Customizer, "File doesn't match pattern *.sdldrw, skipping");
+            m_Customizer->showMessage("File doesn't match pattern *.sdldrw, skipping", wwgmtkMessageType_Warning, xfalse);
             continue;
         }
 
         savedModelName.Substitute("slddrw", "zip");
-
-        m_Customizer->showMessage("Processing save of model " + savedModelName, wwgmtkMessageType_Info);
-
-        LOG_DEBUG_INFO_MSG(m_Customizer,  "Expected zip file name is %s", (const char*) savedModelName);
+        m_Customizer->showMessage(xstring::Printf("Expected zip file name is %s", (const char*)savedModelName), wwgmtkMessageType_Info, xfalse);
 
         for (const auto neutralDataPath : m_NeutralDataPaths)
         {
@@ -53,13 +48,16 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
             xstring sourcePath = neutralDataPath.c_str();
             sourcePath += L"\\" + savedModelName;
 
-            m_Customizer->showMessage("Looking for neutral data zip file in path " + sourcePath, wwgmtkMessageType_Info);
+            m_Customizer->showMessage("Looking for neutral data zip file in path " + sourcePath, wwgmtkMessageType_Info, xfalse);
 
             DWORD dwAttrib = GetFileAttributes(sourcePath);
             if (dwAttrib == INVALID_FILE_ATTRIBUTES || (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
+            {
+                m_Customizer->showMessage("Zip file not found " + sourcePath, wwgmtkMessageType_Warning, xfalse);
                 continue;
+            }
 
-            LOG_DEBUG_INFO_MSG(m_Customizer, "Adding content %s with name %s", (const char*) sourcePath, (const char*) savedModelName);
+            m_Customizer->showMessage(xstring::Printf("Adding content %s with name %s", (const char*)sourcePath, (const char*)savedModelName), wwgmtkMessageType_Info, xfalse);
 
             wwgmtkEditEpmDocument_ptr epmEdit = UWGMUtils::getEditEPMDocumentInWorkSpace(workspaceView, editor, originalModelName);
             if (epmEdit.isnull())
@@ -75,7 +73,8 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
                 continue;
             }
 
-            LOG_DEBUG_INFO_MSG(m_Customizer, "Opening content for write");
+
+            m_Customizer->showMessage("Opening content for write", wwgmtkMessageType_Info, xfalse);
 
             wwgmtkCachedFile_ptr cachedFile = editor->openContentForWrite(editContent);
             if (cachedFile.isnull())
@@ -86,7 +85,8 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
 
             xstring destinationPath = cachedFile->getHandle();
 
-            LOG_DEBUG_INFO_MSG(m_Customizer, "Opening writing content to %s", (const char*) destinationPath);
+            m_Customizer->showMessage(xstring::Printf("Opening writing content to %s", (const char*)destinationPath), wwgmtkMessageType_Info, xfalse);
+
 
             if (!FileSystemUtils::copyFile(sourcePath, destinationPath))
             {
@@ -96,8 +96,9 @@ void UWGMNeutralDataAttachPluginSaveListener::onPostSaveToWorkspace(wwgmtkWorksp
             }
             cachedFile->close();
             editor->commit();
+            m_Customizer->showMessage(xstring::Printf("Added attachment %s", (const char*)savedModelName), wwgmtkMessageType_Info);
 
-            m_Customizer->showMessage("Deleting file " + sourcePath, wwgmtkMessageType_Info);
+            m_Customizer->showMessage("Deleting file " + sourcePath, wwgmtkMessageType_Info, xfalse);
             DeleteFile(sourcePath);
             isAnythingChanged = true;
         }

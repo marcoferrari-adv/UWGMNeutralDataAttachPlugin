@@ -1,6 +1,8 @@
 #pragma once
 
 #include "configuration/UWGMClientIni.hpp"
+#include "utilities/Logger.hpp"
+
 
 #include <wwgmtkcustomizer.h>
 #include <memory>
@@ -17,7 +19,7 @@ public:
 
 	xstring executeJSCommand(xrstring params);
 
-	void showMessage(xstring msg, xint msgType);
+	void showMessage(xstring msg, xint msgType, xbool forceUWGMClientPrint = xtrue, xbool toFile = xtrue);
 
 	wwgmtkClient_ptr getClient()
 	{
